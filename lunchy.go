@@ -3,6 +3,11 @@ package main
 import (
   "flag"
   "fmt"
+  "io/ioutil"
+  "log"
+  "os"
+  "os/user"
+  "strings"
 )
 
 func showBanner() {
@@ -45,11 +50,51 @@ func checkOperation(command string, pattern string) {
   switch command {
   case "ls":
     ls(pattern)
+  default:
+    fmt.Println("Uh oh, I didn't expect this: lunchy", strings.Join(os.Args[1:], " "))
   }
 }
 
+func dirs() []string {
+  var result []string
+
+  usr, err := user.Current()
+  if err != nil {
+    log.Fatal(err)
+  }
+
+  result = append(result, "/Library/LaunchAgents", usr.HomeDir+"/Library/LaunchAgents")
+
+  // TODO: add root option
+  // if root {
+  //   result = append(result, "/Library/LaunchDaemons", "/System/Library/LaunchDaemons")
+  // }
+
+  return result
+}
+
+func plists(pattern string) []string {
+  var list []string
+
+  for _, dirName := range dirs() {
+    files, err := ioutil.ReadDir(dirName)
+    if err != nil {
+      log.Fatal(err)
+    }
+
+    for _, f := range files {
+      // TODO: only add if matches with the pattern (if there is one)
+      list = append(list, f.Name())
+    }
+  }
+
+  return list
+}
+
 func ls(pattern string) {
-  fmt.Println(pattern)
+  // fmt.Println(pattern)
+  list := plists(pattern)
+  fmt.Println(list)
 }
 
 func main() {
