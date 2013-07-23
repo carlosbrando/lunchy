@@ -3,12 +3,13 @@ package main
 import (
   "flag"
   "fmt"
-  "io/ioutil"
   "log"
-  "os"
   "os/user"
-  "strings"
+  "path/filepath"
 )
+
+var command string
+var pattern string
 
 func showBanner() {
   fmt.Println(`Lunchy 1.0, the friendly launchctl wrapper
@@ -46,70 +47,69 @@ Example:
 Note: if you run lunchy as root, you can manage daemons in /Library/LaunchDaemons also.`)
 }
 
-func checkOperation(command string, pattern string) {
+func checkError(err error) {
+  if err != nil {
+    log.Fatalf("Uh oh, I didn't expect this:\n%s\n", err)
+  }
+}
+
+func checkOperation() {
   switch command {
   case "ls":
-    ls(pattern)
+    ls()
   default:
-    fmt.Println("Uh oh, I didn't expect this: lunchy", strings.Join(os.Args[1:], " "))
+    showBanner()
   }
 }
 
 func dirs() []string {
-  var result []string
-
   usr, err := user.Current()
-  if err != nil {
-    log.Fatal(err)
-  }
+  checkError(err)
 
-  result = append(result, "/Library/LaunchAgents", usr.HomeDir+"/Library/LaunchAgents")
+  return []string{"/Library/LaunchAgents", usr.HomeDir + "/Library/LaunchAgents"}
 
   // TODO: add root option
   // if root {
   //   result = append(result, "/Library/LaunchDaemons", "/System/Library/LaunchDaemons")
   // }
-
-  return result
 }
 
-func plists(pattern string) []string {
+func plists() []string {
   var list []string
 
-  for _, dirName := range dirs() {
-    files, err := ioutil.ReadDir(dirName)
-    if err != nil {
-      log.Fatal(err)
-    }
+  for _, dirname := range dirs() {
+    files, err := filepath.Glob(dirname + "/*" + pattern + "*.plist")
+    checkError(err)
 
-    for _, f := range files {
-      // TODO: only add if matches with the pattern (if there is one)
-      list = append(list, f.Name())
-    }
+    list = append(list, files...)
   }
 
   return list
 }
 
-func ls(pattern string) {
-  // fmt.Println(pattern)
-  list := plists(pattern)
-  fmt.Println(list)
+func ls() {
+  list := plists()
+
+  for _, filename := range list {
+    fmt.Println(filename)
+  }
 }
 
 func main() {
   flag.Parse()
 
   args := flag.Args()
-  if len(args) < 2 {
+  if len(args) < 1 {
     showBanner()
     return
   }
 
-  command := args[0]
-  pattern := args[1]
+  command = args[0]
+  if len(args) > 1 {
+    pattern = args[1]
+  }
 
-  checkOperation(command, pattern)
+  checkOperation()
 
   // fmt.Println(command)
   // fmt.Println(pattern)
