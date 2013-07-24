@@ -6,6 +6,7 @@ import (
   "log"
   "os/user"
   "path/filepath"
+  "strings"
 )
 
 var command string
@@ -87,11 +88,14 @@ func plists() []string {
   return list
 }
 
-func ls() {
-  list := plists()
+func basename(f string) string {
+  basename := strings.Split(filepath.Base(f), ".")
+  return strings.Join(basename[:len(basename)-1], ".")
+}
 
-  for _, filename := range list {
-    fmt.Println(filename)
+func ls() {
+  for _, filename := range plists() {
+    fmt.Println(basename(filename))
   }
 }
 
