@@ -1,16 +1,17 @@
 package main
 
 import (
-  "flag"
   "fmt"
   "log"
+  "os"
   "os/user"
   "path/filepath"
   "strings"
 )
 
-var command string
 var pattern string
+
+var longFlag bool
 
 func showBanner() {
   fmt.Println(`Lunchy 1.0, the friendly launchctl wrapper
@@ -54,7 +55,7 @@ func checkError(err error) {
   }
 }
 
-func checkOperation() {
+func execute(command string) {
   switch command {
   case "ls":
     ls()
@@ -99,22 +100,21 @@ func ls() {
   }
 }
 
-func main() {
-  flag.Parse()
+func init() {
 
-  args := flag.Args()
+}
+
+func main() {
+  args := os.Args[1:]
   if len(args) < 1 {
     showBanner()
     return
   }
 
-  command = args[0]
+  command := args[0]
   if len(args) > 1 {
     pattern = args[1]
   }
 
-  checkOperation()
-
-  // fmt.Println(command)
-  // fmt.Println(pattern)
+  execute(command)
 }
