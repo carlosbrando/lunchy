@@ -3,6 +3,7 @@ package main
 import (
   "fmt"
   "log"
+  "lunchy/cmd"
   "os"
   "os/user"
   "path/filepath"
@@ -117,4 +118,6 @@ func main() {
   }
 
   execute(command)
+
+  cmd.List()
 }
