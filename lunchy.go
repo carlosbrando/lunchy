@@ -2,8 +2,8 @@ package main
 
 import (
   "fmt"
+  "github.com/carlosbrando/lunchy/cmd"
   "log"
-  "lunchy/cmd"
   "os"
   "os/user"
   "path/filepath"
