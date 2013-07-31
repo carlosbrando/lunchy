@@ -2,7 +2,21 @@ package main
 
 import "os"
 
+type Options struct {
+  command string
+  pattern string
+}
+
 var options Options
+
+func execute() {
+  switch options.command {
+  case "list", "ls":
+    list()
+  default:
+    showBanner()
+  }
+}
 
 func main() {
   args := os.Args[1:]
