@@ -1,7 +1,6 @@
 package main
 
 import (
-  "fmt"
   "os/user"
   "path/filepath"
   "strings"
@@ -24,21 +23,15 @@ func dirs() []string {
   // }
 }
 
-func plists() []string {
+func plists(pattern string) []string {
   var list []string
 
   for _, dirname := range dirs() {
-    files, err := filepath.Glob(dirname + "/*" + options.pattern + "*.plist")
+    files, err := filepath.Glob(dirname + "/*" + pattern + "*.plist")
     checkError(err)
 
     list = append(list, files...)
   }
 
   return list
-}
-
-func list() {
-  for _, filename := range plists() {
-    fmt.Println(basename(filename))
-  }
 }
