@@ -2,7 +2,6 @@ package main
 
 import (
   "fmt"
-  "log"
   "os/user"
   "path/filepath"
   "strings"
@@ -11,12 +10,6 @@ import (
 func basename(f string) string {
   basename := strings.Split(filepath.Base(f), ".")
   return strings.Join(basename[:len(basename)-1], ".")
-}
-
-func checkError(err error) {
-  if err != nil {
-    log.Fatalf("Uh oh, I didn't expect this:\n%s\n", err)
-  }
 }
 
 func dirs() []string {

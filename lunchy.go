@@ -1,6 +1,9 @@
 package main
 
-import "os"
+import (
+  "log"
+  "os"
+)
 
 type Options struct {
   command string
@@ -15,6 +18,12 @@ func execute() {
     list()
   default:
     showBanner()
+  }
+}
+
+func checkError(err error) {
+  if err != nil {
+    log.Fatalf("Uh oh, I didn't expect this:\n%s\n", err)
   }
 }
 
