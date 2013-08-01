@@ -1,9 +1,19 @@
 package main
 
-import "fmt"
+import (
+  "fmt"
 
-func (c *Command) list() {
-	for _, filename := range plists(c.pattern) {
-		fmt.Println(basename(filename))
-	}
+  "github.com/carlosbrando/lunchy/agents"
+)
+
+func (c *Command) list() error {
+  agents, err := agents.Find(c.pattern)
+  if err != nil {
+    return err
+  }
+
+  for _, agent := range agents {
+    fmt.Println(agent.Name)
+  }
+  return nil
 }
