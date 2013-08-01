@@ -1,18 +1,17 @@
 package main
 
 type Command struct {
-  command string
-  pattern string
+	command string
+	pattern string
 }
 
-func (c *Command) Execute() error {
-  switch c.command {
-  case "list", "ls":
-    cmd := ListCommand{command: c}
-    cmd.execute()
-  default:
-    showBanner()
-  }
+func (c *Command) execute() error {
+	switch c.command {
+	case "list", "ls":
+		c.list()
+	default:
+		showBanner()
+	}
 
-  return nil
+	return nil
 }
