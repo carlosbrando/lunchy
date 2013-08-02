@@ -1,19 +1,23 @@
 package main
 
 import (
-  "fmt"
+	"fmt"
 
-  "github.com/carlosbrando/lunchy/agents"
+	"github.com/carlosbrando/lunchy/agents"
 )
 
 func (c *Command) list() error {
-  agents, err := agents.Find(c.pattern)
-  if err != nil {
-    return err
-  }
+	agents, err := agents.Find(c.pattern)
+	if err != nil {
+		return err
+	}
 
-  for _, agent := range agents {
-    fmt.Println(agent.Name)
-  }
-  return nil
+	for _, agent := range agents {
+		if c.long {
+			fmt.Println(agent.Fullpath)
+		} else {
+			fmt.Println(agent.Name)
+		}
+	}
+	return nil
 }
