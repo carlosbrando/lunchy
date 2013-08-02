@@ -7,7 +7,14 @@ import (
 
 func formatFlags(flags []string, c *Command) {
 	for _, flag := range flags {
-		if flag == "-l" {
+		switch flag {
+		case "-F", "--force":
+			c.force = true
+		case "-v", "--verbose":
+			c.verbose = true
+		case "-w", "--write":
+			c.write = true
+		case "-l", "--long":
 			c.long = true
 		}
 	}

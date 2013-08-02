@@ -4,6 +4,9 @@ type Command struct {
 	command string
 	pattern string
 	long    bool
+	force   bool
+	verbose bool
+	write   bool
 }
 
 func (c *Command) execute() error {
