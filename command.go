@@ -15,6 +15,10 @@ func (c *Command) execute() error {
 		if err := c.list(); err != nil {
 			return err
 		}
+	case "show":
+		if err := c.show(); err != nil {
+			return err
+		}
 	default:
 		showBanner()
 	}

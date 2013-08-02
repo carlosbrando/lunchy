@@ -1,7 +1,7 @@
 package main
 
 import (
-	"log"
+	"fmt"
 	"os"
 )
 
@@ -38,6 +38,6 @@ func main() {
 
 	err := cmd.execute()
 	if err != nil {
-		log.Fatalf("Uh oh, I didn't expect this:\n%s\n", err)
+		fmt.Println(err)
 	}
 }
