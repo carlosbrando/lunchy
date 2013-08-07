@@ -3,6 +3,7 @@ package agents
 import (
 	"os/user"
 	"path/filepath"
+	"regexp"
 	"strings"
 )
 
@@ -44,14 +45,21 @@ func Find(pattern string) ([]Agent, error) {
 	}
 
 	for _, dirname := range dirs {
-		files, err := filepath.Glob(dirname + "/*" + pattern + "*.plist")
+		files, err := filepath.Glob(dirname + "/*.plist")
 		if err != nil {
 			return nil, err
 		}
 
 		for _, file := range files {
-			agent := &Agent{Fullpath: file, Name: basename(file)}
-			list = append(list, *agent)
+			matched, err := regexp.MatchString(strings.ToLower(pattern), strings.ToLower(file))
+			if err != nil {
+				return nil, err
+			}
+
+			if matched {
+				agent := &Agent{Fullpath: file, Name: basename(file)}
+				list = append(list, *agent)
+			}
 		}
 	}
 
