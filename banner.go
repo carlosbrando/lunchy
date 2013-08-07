@@ -1,9 +1,13 @@
+// Copyright 2013 Carlos Brando. All rights reserved.
+// Use of this source code is governed by a MIT license
+// that can be found in the LICENSE file.
+
 package main
 
 import "fmt"
 
 func showBanner() {
-  fmt.Println(`Lunchy 1.0, the friendly launchctl wrapper
+	fmt.Println(`Lunchy 1.0, the friendly launchctl wrapper
 Usage: lunchy [start|stop|restart|ls|list|status|install|show|edit] [options]
     -F, --force                      Force start (disabled) agents
     -v, --verbose                    Show command executions
