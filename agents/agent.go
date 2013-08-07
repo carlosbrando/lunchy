@@ -5,6 +5,7 @@ import (
 	"path/filepath"
 	"regexp"
 	"strings"
+	"syscall"
 )
 
 type Agent struct {
@@ -22,18 +23,23 @@ func basename(f string) string {
 	}
 }
 
+func root() bool {
+	return syscall.Geteuid() == 0
+}
+
 func directories() ([]string, error) {
 	usr, err := user.Current()
 	if err != nil {
 		return nil, err
 	}
 
-	return []string{"/Library/LaunchAgents", usr.HomeDir + "/Library/LaunchAgents"}, nil
+	result := []string{"/Library/LaunchAgents", usr.HomeDir + "/Library/LaunchAgents"}
 
-	// TODO: add root option
-	// if root {
-	//   result = append(result, "/Library/LaunchDaemons", "/System/Library/LaunchDaemons")
-	// }
+	if root() {
+		result = append(result, "/Library/LaunchDaemons", "/System/Library/LaunchDaemons")
+	}
+
+	return result, nil
 }
 
 func Find(pattern string) ([]Agent, error) {
