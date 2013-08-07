@@ -17,6 +17,7 @@ type Agent struct {
 	Fullpath string
 }
 
+// basename returns only the basename of a fullpath filename.
 func basename(f string) string {
 	basename := strings.Split(filepath.Base(f), ".")
 
@@ -27,10 +28,12 @@ func basename(f string) string {
 	}
 }
 
+// root returns true if program was called by a root user.
 func root() bool {
 	return syscall.Geteuid() == 0
 }
 
+// directories returns a list of all directories that contain agents.
 func directories() ([]string, error) {
 	usr, err := user.Current()
 	if err != nil {
@@ -46,6 +49,8 @@ func directories() ([]string, error) {
 	return result, nil
 }
 
+// Find returns only the agents that match with the pattern.
+// If no pattern was assigned, returns all agents.
 func Find(pattern string) ([]Agent, error) {
 	var list []Agent
 
