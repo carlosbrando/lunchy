@@ -13,6 +13,7 @@ type Command struct {
 	write   bool
 }
 
+// execute verifies what command to run.
 func (c *Command) execute() error {
 	switch c.command {
 	case "list", "ls":
@@ -21,6 +22,10 @@ func (c *Command) execute() error {
 		}
 	case "show":
 		if err := c.show(); err != nil {
+			return err
+		}
+	case "status":
+		if err := c.status(); err != nil {
 			return err
 		}
 	default:
