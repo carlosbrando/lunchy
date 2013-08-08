@@ -4,6 +4,8 @@
 
 package main
 
+import "os/exec"
+
 type Command struct {
 	command string
 	pattern string
@@ -28,9 +30,24 @@ func (c *Command) execute() error {
 		if err := c.status(); err != nil {
 			return err
 		}
+	case "start":
+		if err := c.start(); err != nil {
+			return err
+		}
 	default:
 		showBanner()
 	}
 
 	return nil
+}
+
+func runCommand(name string, arg ...string) (string, error) {
+	cmd := exec.Command(name, arg...)
+
+	output, err := cmd.Output()
+	if err == nil {
+		return string(output), nil
+	} else {
+		return "", err
+	}
 }

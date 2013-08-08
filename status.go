@@ -6,7 +6,6 @@ package main
 
 import (
 	"fmt"
-	"os/exec"
 	"regexp"
 	"strings"
 
@@ -24,14 +23,12 @@ func printHeader(header string) {
 }
 
 func (c *Command) status() error {
-	cmd := exec.Command("launchctl", "list")
-
-	out, err := cmd.Output()
+	out, err := runCommand("launchctl", "list")
 	if err != nil {
 		return err
 	}
 
-	output := strings.Split(string(out), "\n")
+	output := strings.Split(out, "\n")
 
 	agents, err := agents.Find(c.pattern)
 	if err != nil {
