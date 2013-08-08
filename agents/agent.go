@@ -5,6 +5,7 @@
 package agents
 
 import (
+	"fmt"
 	"os/user"
 	"path/filepath"
 	"regexp"
@@ -79,4 +80,27 @@ func Find(pattern string) ([]Agent, error) {
 	}
 
 	return list, nil
+}
+
+// FindOne returns only one agent when found.
+// It returns nil if none were found.
+// FindOne will print a list returns nil if multiple agents were found.
+func FindOne(pattern string) (agent *Agent, err error) {
+	agents, err := Find(pattern)
+	if err != nil {
+		return nil, err
+	}
+
+	switch len(agents) {
+	case 0:
+		return nil, nil
+	case 1:
+		return &agents[0], nil
+	default:
+		fmt.Printf("Multiple daemons found matching '%s'. You need to be more specific. Matches found are:\n", pattern)
+		for _, agent := range agents {
+			fmt.Println(agent.Name)
+		}
+		return nil, nil
+	}
 }
