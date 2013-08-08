@@ -13,6 +13,16 @@ import (
 	"github.com/carlosbrando/lunchy/agents"
 )
 
+var headerPrinted bool = false
+
+// printHeader prints the header if it was not printed before.
+func printHeader(header string) {
+	if !headerPrinted {
+		fmt.Println(header)
+		headerPrinted = true
+	}
+}
+
 func (c *Command) status() error {
 	cmd := exec.Command("launchctl", "list")
 
@@ -36,6 +46,7 @@ func (c *Command) status() error {
 			}
 
 			if matched {
+				printHeader(output[0])
 				fmt.Println(line)
 			}
 		}
