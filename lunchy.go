@@ -9,7 +9,7 @@ import (
 	"os"
 )
 
-func formatFlags(flags []string, c *Command) {
+func fmtFlags(flags []string, c *Command) {
 	for _, flag := range flags {
 		switch flag {
 		case "-F", "--force":
@@ -27,7 +27,7 @@ func formatFlags(flags []string, c *Command) {
 func main() {
 	args := os.Args[1:]
 	if len(args) < 1 {
-		showBanner()
+		printBanner()
 		return
 	}
 
@@ -37,10 +37,10 @@ func main() {
 	}
 
 	if len(args) > 2 {
-		formatFlags(args[2:], cmd)
+		fmtFlags(args[2:], cmd)
 	}
 
-	err := cmd.execute()
+	err := cmd.exec()
 	if err != nil {
 		fmt.Println(err)
 	}

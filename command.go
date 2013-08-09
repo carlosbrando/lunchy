@@ -20,7 +20,7 @@ type Command struct {
 }
 
 // execute verifies what command to run.
-func (c *Command) execute() error {
+func (c *Command) exec() error {
 	switch c.command {
 	case "list", "ls":
 		if err := c.list(); err != nil {
@@ -39,7 +39,7 @@ func (c *Command) execute() error {
 			return err
 		}
 	default:
-		showBanner()
+		printBanner()
 	}
 
 	return nil

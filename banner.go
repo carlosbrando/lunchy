@@ -6,7 +6,7 @@ package main
 
 import "fmt"
 
-func showBanner() {
+func printBanner() {
 	fmt.Println(`Lunchy 1.0, the friendly launchctl wrapper
 Usage: lunchy [start|stop|restart|ls|list|status|install|show|edit] [options]
     -F, --force                      Force start (disabled) agents
