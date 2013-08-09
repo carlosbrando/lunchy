@@ -45,15 +45,12 @@ func (c *Command) execute() error {
 	return nil
 }
 
-// runCommand execute a command and returns the output as a string.
-func runCommand(name string, arg ...string) (string, error) {
-	output, err := exec.Command(name, arg...).Output()
-
+func runCmd(name string, arg ...string) (output string, err error) {
+	out, err := exec.Command(name, arg...).Output()
 	if err == nil {
-		return string(output), nil
-	} else {
-		return "", err
+		output = string(out)
 	}
+	return
 }
 
 // execProcess executes a process replacing the current Go process.

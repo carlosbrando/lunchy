@@ -23,7 +23,7 @@ func printHeader(header string) {
 }
 
 func (c *Command) status() error {
-	out, err := runCommand("launchctl", "list")
+	out, err := runCmd("launchctl", "list")
 	if err != nil {
 		return err
 	}
