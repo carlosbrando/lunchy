@@ -38,6 +38,10 @@ func (c *Command) execute() error {
 		if err := c.start(); err != nil {
 			return err
 		}
+	case "stop":
+		if err := c.stop(); err != nil {
+			return err
+		}
 	default:
 		showBanner()
 	}

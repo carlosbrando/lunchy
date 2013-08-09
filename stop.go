@@ -10,15 +10,15 @@ import (
 	"github.com/carlosbrando/lunchy/agents"
 )
 
-func (c *Command) start() error {
+func (c *Command) stop() error {
 	agent, err := agents.FindOne(c.pattern)
 	if err != nil {
 		return err
 	}
 
 	if agent != nil {
-		fmt.Println("starting", agent.Name)
-		execProcess("launchctl", "load", agent.Fullpath)
+		fmt.Println("stopping", agent.Name)
+		execProcess("launchctl", "unload", agent.Fullpath)
 	}
 
 	return nil
