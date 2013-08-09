@@ -20,12 +20,33 @@ func (c *Command) launchctl() error {
 		switch c.command {
 		case "start":
 			fmt.Println("starting", agent.Name)
-			execProcess("launchctl", "load", agent.Fullpath)
 		case "stop":
 			fmt.Println("stopping", agent.Name)
-			execProcess("launchctl", "unload", agent.Fullpath)
 		}
+
+		execProcess("launchctl", c.args(agent.Fullpath)...)
 	}
 
 	return nil
+}
+
+func (c *Command) args(more ...string) []string {
+	var args []string
+
+	if c.force {
+		args = append(args, "-F")
+	}
+
+	if c.write {
+		args = append(args, "-w")
+	}
+
+	switch c.command {
+	case "start":
+		args = append([]string{"load"}, args...)
+	case "stop":
+		args = append([]string{"unload"}, args...)
+	}
+
+	return append(args, more...)
 }
