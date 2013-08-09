@@ -4,12 +4,20 @@
 
 package main
 
-// import "fmt"
+import "github.com/carlosbrando/lunchy/agents"
 
 func (c *Command) start() error {
+	agent, err := agents.FindOne(c.pattern)
+	if err != nil {
+		return err
+	}
 
-	// execute("launchctl load #{force}#{write}#{path.inspect}")
-	// puts "started #{name}"
+	if agent != nil {
+		err = execProcess("launchctl", "load", agent.Fullpath)
+		if err != nil {
+			return err
+		}
+	}
 
 	return nil
 }

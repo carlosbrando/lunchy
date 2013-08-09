@@ -4,7 +4,11 @@
 
 package main
 
-import "os/exec"
+import (
+	"os"
+	"os/exec"
+	"syscall"
+)
 
 type Command struct {
 	command string
@@ -41,13 +45,28 @@ func (c *Command) execute() error {
 	return nil
 }
 
+// runCommand execute a command and returns the output as a string.
 func runCommand(name string, arg ...string) (string, error) {
-	cmd := exec.Command(name, arg...)
+	output, err := exec.Command(name, arg...).Output()
 
-	output, err := cmd.Output()
 	if err == nil {
 		return string(output), nil
 	} else {
 		return "", err
 	}
+}
+
+// execProcess executes a process replacing the current Go process.
+func execProcess(process string, args ...string) error {
+	binary, err := exec.LookPath(process)
+	if err != nil {
+		return err
+	}
+
+	err = syscall.Exec(binary, append([]string{process}, args...), os.Environ())
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

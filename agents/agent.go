@@ -93,6 +93,7 @@ func FindOne(pattern string) (agent *Agent, err error) {
 
 	switch len(agents) {
 	case 0:
+		fmt.Printf("No daemon was found matching '%s'.\n", pattern)
 		return nil, nil
 	case 1:
 		return &agents[0], nil
