@@ -34,12 +34,8 @@ func (c *Command) execute() error {
 		if err := c.status(); err != nil {
 			return err
 		}
-	case "start":
-		if err := c.start(); err != nil {
-			return err
-		}
-	case "stop":
-		if err := c.stop(); err != nil {
+	case "start", "stop":
+		if err := c.launchctl(); err != nil {
 			return err
 		}
 	default:
