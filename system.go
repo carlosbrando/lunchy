@@ -22,9 +22,12 @@ func (c *Command) launchctl() error {
 			fmt.Println("starting", agent.Name)
 		case "stop":
 			fmt.Println("stopping", agent.Name)
+		case "restart":
+			c.clone("stop").launchctl()
+			c.clone("start").launchctl()
 		}
 
-		execProcess("launchctl", c.args(agent.Fullpath)...)
+		runCmd("launchctl", c.args(agent.Fullpath)...)
 	}
 
 	return nil

@@ -4,11 +4,7 @@
 
 package main
 
-import (
-	"os"
-	"os/exec"
-	"syscall"
-)
+import "os/exec"
 
 type Command struct {
 	command string
@@ -34,7 +30,7 @@ func (c *Command) exec() error {
 		if err := c.status(); err != nil {
 			return err
 		}
-	case "start", "stop":
+	case "start", "stop", "restart":
 		if err := c.launchctl(); err != nil {
 			return err
 		}
@@ -45,25 +41,26 @@ func (c *Command) exec() error {
 	return nil
 }
 
-func runCmd(name string, arg ...string) (output string, err error) {
-	out, err := exec.Command(name, arg...).Output()
+func (c *Command) clone(command string) *Command {
+	return &Command{
+		command: command,
+		pattern: c.pattern,
+		long:    c.long,
+		force:   c.force,
+		verbose: c.verbose,
+		write:   c.write,
+	}
+}
+
+func runCmd(name string, args ...string) (output string, err error) {
+	binary, err := exec.LookPath(name)
+	if err != nil {
+		return
+	}
+
+	out, err := exec.Command(binary, args...).Output()
 	if err == nil {
 		output = string(out)
 	}
 	return
-}
-
-// execProcess executes a process replacing the current Go process.
-func execProcess(process string, args ...string) error {
-	binary, err := exec.LookPath(process)
-	if err != nil {
-		return err
-	}
-
-	err = syscall.Exec(binary, append([]string{process}, args...), os.Environ())
-	if err != nil {
-		return err
-	}
-
-	return nil
 }
