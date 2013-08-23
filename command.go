@@ -34,6 +34,10 @@ func (c *Command) exec() error {
 		if err := c.launchctl(); err != nil {
 			return err
 		}
+	case "edit":
+		if err := c.edit(); err != nil {
+			return err
+		}
 	default:
 		printBanner()
 	}
