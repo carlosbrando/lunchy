@@ -15,6 +15,25 @@ type Command struct {
 	write   bool
 }
 
+func (c *Command) parseFlags(flags []string) {
+	for _, flag := range flags {
+		switch flag {
+		case "-F", "--force":
+			c.force = true
+		case "-v", "--verbose":
+			c.verbose = true
+		case "-w", "--write":
+			c.write = true
+		case "-l", "--long":
+			c.long = true
+		default:
+			if c.pattern == "" {
+				c.pattern = flag
+			}
+		}
+	}
+}
+
 // execute verifies what command to run.
 func (c *Command) exec() error {
 	switch c.command {
